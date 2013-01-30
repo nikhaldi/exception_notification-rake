@@ -2,7 +2,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require 'exception_notifier/rake/version'
 
 Gem::Specification.new do |s|
-  s.name        = 'notification_exception-rake'
+  s.name        = 'exception_notification-rake'
   s.version     = ExceptionNotifier::Rake::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Nik Haldimann']
