@@ -10,8 +10,8 @@ class ExceptionNotifier
     end
 
     def display_error_message_with_notifications(ex)
-      ExceptionNotifier::Rake.maybe_deliver_notification(ex)
       display_error_message_without_notifications(ex)
+      ExceptionNotifier::Rake.maybe_deliver_notification(ex)
     end
   end
 end
