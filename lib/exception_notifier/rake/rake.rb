@@ -17,7 +17,6 @@ class ExceptionNotifier
     def self.default_notifier_options
       {
         :email_prefix => "[Rake Failure] ",
-        # TODO add stdin/stderr sections with captured output
         :background_sections => %w(backtrace),
       }
     end

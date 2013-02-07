@@ -9,7 +9,6 @@ class RakeTest < Test::Unit::TestCase
     assert !ExceptionNotifier::Rake.configured?
   end
 
-
   def test_configure_only_default_options
     ExceptionNotifier::Rake.configure
     assert ExceptionNotifier::Rake.configured?
