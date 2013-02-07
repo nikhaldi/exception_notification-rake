@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
     ' sending mail upon failures in Rake tasks'
 
   s.add_runtime_dependency 'exception_notification', '~> 3.0.0'
-  # TODO how to specify rake dependency?
-  s.add_development_dependency 'rake'
+  # NB: Rake before 0.9.0 won't support the exception hook we're using
+  s.add_runtime_dependency 'rake', '>= 0.9.0'
   s.add_development_dependency 'rails', '~> 3.2.0'
 
   s.files         = `git ls-files`.split("\n")
