@@ -30,11 +30,10 @@ class ExceptionNotifier
     end
 
     def self.maybe_deliver_notification(exception, data={})
-      # TODO needs tests
       if configured?
         options = notifier_options
         if !data.empty?
-          option = options.dup
+          options = options.dup
           options[:data] = data.merge(options[:data] || {})
         end
         ExceptionNotifier::Notifier.background_exception_notification(
