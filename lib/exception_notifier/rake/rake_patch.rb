@@ -11,7 +11,12 @@ class ExceptionNotifier
 
     def display_error_message_with_notifications(ex)
       display_error_message_without_notifications(ex)
-      ExceptionNotifier::Rake.maybe_deliver_notification(ex)
+      ExceptionNotifier::Rake.maybe_deliver_notification(ex,
+        :rake_command_line => reconstruct_command_line)
+    end
+
+    def reconstruct_command_line
+      "rake #{ARGV.join(' ')}"
     end
   end
 end
