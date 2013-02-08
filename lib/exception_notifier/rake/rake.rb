@@ -9,10 +9,15 @@ class ExceptionNotifier
 
     @notifier_options = {}
 
+    # Whether Rake exception notifications have been configured.
     def self.configured?
       !@notifier_options.empty?
     end
 
+    # Configure Rake exception notifications. Should be called in a config file,
+    # usually in config/environments/production.rb for production use.
+    # An optional hash of options can be given, which will be passed through
+    # unchanged to the underlying ExceptionNotifier.
     def self.configure(options = {})
       @notifier_options.merge!(default_notifier_options)
       @notifier_options.merge!(options)
@@ -29,7 +34,13 @@ class ExceptionNotifier
       @notifier_options
     end
 
+    # Deliver a notification about the given exception by email, in case
+    # notifications have been configured. The additional data hash will
+    # be passed through to ExceptionNotifier's data hash and will be availble
+    # in templates.
     def self.maybe_deliver_notification(exception, data={})
+      # TODO must check whether config has fully loaded yet, to avoid masking
+      # configuration issues.
       if configured?
         options = notifier_options
         if !data.empty?
