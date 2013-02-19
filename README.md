@@ -11,7 +11,6 @@ This Ruby gem is an extension of the [exception_notification gem](http://rubygem
 Exception notification must be set up in your Rails config files. In general, you'll want to do this in environment-specific config files, such as `config/environments/production.rb`. Minimal configuration:
 
     # config/environments/production.rb
-    require 'exception_notifier/rake'
 
     YourApp::Application.configure do
       # Other configuration here, including ActionMailer config ...
@@ -29,7 +28,6 @@ Exception notification must be set up in your Rails config files. In general, yo
 If you are already using `ExceptionNotifier` anyway, you don't need to configure it again and all you need is:
 
 	# config/environments/production.rb
-	require 'exception_notifier/rake'
 
 	YourApp::Application.configure do
 	  # Other configuration here, including ExceptionNotifer and ActionMailer config ...

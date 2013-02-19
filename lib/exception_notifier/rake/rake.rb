@@ -39,8 +39,6 @@ class ExceptionNotifier
     # be passed through to ExceptionNotifier's data hash and will be availble
     # in templates.
     def self.maybe_deliver_notification(exception, data={})
-      # TODO must check whether config has fully loaded yet, to avoid masking
-      # configuration issues.
       if configured?
         options = notifier_options
         if !data.empty?
