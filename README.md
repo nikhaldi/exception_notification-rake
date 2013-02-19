@@ -90,7 +90,8 @@ Email sent upon a failure will include the Rake tasks executed and a stacktrace.
 
 If you're using Heroku, the [Scheduler add-on](http://addons.heroku.com/scheduler) is a very convenient and cheap (i.e., free) way to run scheduled batch jobs. In a Rails environment it's easiest to define batch jobs as Rake tasks. However, the only way to find out whether a task run by the scheduler succeeded or failed is generally reading the logs.
 
-This gem fixes this issue. If you configure exception notification as described above it should work out of the box with the Heroku Scheduler. (Provided you have email delivery set up in your Heroku app - you could try the [SendGrid add-on](https://addons.heroku.com/sendgrid) which comes in a free version that should be good enough for notifications.)
+This gem fixes this issue. [Here is a detailed guide](http://blog.nikhaldimann.com/2013/02/19/failure-notifications-for-rake-tasks-on-the-heroku-scheduler/) about configuring it on Heroku. In summary: If you configure exception notification as described above it should work out of the box with the Heroku Scheduler. (Provided you have email delivery set up in your Heroku app - you could try the [SendGrid add-on](https://addons.heroku.com/sendgrid) which comes in a free version that should be good enough for notifications.)
+
 
 
 ### Customization
