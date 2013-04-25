@@ -42,7 +42,7 @@ If you are already using `ExceptionNotifier` anyway, you don't need to configure
 
 Email sent upon a failure will include the Rake tasks executed and a stacktrace. This is the result from calling an undefined method `khaaaaan!` in a task called `failing_task`:
 
-	Subject: [Rake Failure] (NoMethodError) "undefined method `khaaaaan!' for main:Object"
+	Subject: [ERROR] (NoMethodError) "undefined method `khaaaaan!' for main:Object"
 	From: "notifier" <sender.address@example.com>
 	To: <your.email@example.com>
 
@@ -51,7 +51,7 @@ Email sent upon a failure will include the Rake tasks executed and a stacktrace.
 	  undefined method `khaaaaan!&#x27; for main:Object
 	  lib/tasks/scheduler.rake:33:in `block in &lt;top (required)&gt;&#x27;
 
-	  -------------------------------
+	-------------------------------
 	Rake:
 	-------------------------------
 
