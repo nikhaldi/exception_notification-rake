@@ -25,7 +25,6 @@ class ExceptionNotifier
 
     def self.default_notifier_options
       {
-        :email_prefix => "[Rake Failure] ",
         :background_sections => %w(rake backtrace),
       }
     end
