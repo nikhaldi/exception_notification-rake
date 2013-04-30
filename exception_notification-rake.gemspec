@@ -18,8 +18,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rails', '~> 3.2.0'
   s.add_development_dependency 'mocha', '~> 0.13.3'
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.files         = Dir['LICENSE.md', 'README.md', 'lib/**/*']
+  s.test_files    = Dir['test/**/*.rb']
   s.require_paths = ['lib']
 end
