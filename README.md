@@ -105,7 +105,7 @@ The most likely options you'll want to use are `:email_prefix` and `:exception_r
 	  :email_prefix => "[Rake Failure] ",
 	  :exception_recipients => %w{user1@example.com user2@example.com})
 
-This will prefix the email subjects of Rake failure notifications with `[Cron Failure]` and will send them to the two given email addresses. Note that if you set the same options when you configure `ExceptionNotifier` itself, they will be overridden but for Rake failures only.
+This will prefix the email subjects of Rake failure notifications with `[Rake Failure]` and will send them to the two given email addresses. Note that if you set the same options when you configure `ExceptionNotifier` itself, they will be overridden but for Rake failures only.
 
 If you want to configure sections, which is unlikely, note that by default the sections `['rake', 'backtrace']` are used (where `rake` is a custom section introduced by this gem).
 
