@@ -27,7 +27,7 @@ Exception notification must be set up in your Rails config files. In general, yo
     YourApp::Application.configure do
       # Other configuration here, including ActionMailer config ...
 
-      config.middleware.use ExceptionNotifier,
+      config.middleware.use ExceptionNotification::Rack,
         :ignore_if => lambda { true },
         :email => {
           :sender_address => %{"notifier" <sender.address@example.com>},
