@@ -1,6 +1,6 @@
 # Monkey patching patterns lifted from
 # https://github.com/thoughtbot/airbrake/blob/master/lib/airbrake/rake_handler.rb
-class ExceptionNotifier
+module ExceptionNotifier
   module RakePatch
     def self.included(klass)
       klass.class_eval do

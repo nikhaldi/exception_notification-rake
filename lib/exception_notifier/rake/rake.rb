@@ -1,9 +1,10 @@
 require 'exception_notifier'
 
-class ExceptionNotifier
+module ExceptionNotifier
 
+  # TODO do this in a better place
   # Append application view path to the ExceptionNotifier lookup context.
-  Notifier.append_view_path "#{File.dirname(__FILE__)}/views"
+  # Notifier.append_view_path "#{File.dirname(__FILE__)}/views"
 
   class Rake
 
