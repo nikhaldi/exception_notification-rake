@@ -5,6 +5,17 @@ This Ruby gem is an extension of the [exception_notification gem](http://rubygem
 
 [![Build Status](https://travis-ci.org/nikhaldi/exception_notification-rake.png)](https://travis-ci.org/nikhaldi/exception_notification-rake)
 
+## Installation
+
+If you're using Rails 4 (or you're not using Rails at all), use the latest version of the gem:
+
+    gem 'exception_notification-rake', '~> 0.1.0'
+
+If you're using Rails 3, use the 0.0.x line of versions:
+
+    gem 'exception_notification-rake', '~> 0.0.5'
+
+
 ## Usage
 
 ### Basic Configuration
@@ -17,9 +28,11 @@ Exception notification must be set up in your Rails config files. In general, yo
       # Other configuration here, including ActionMailer config ...
 
       config.middleware.use ExceptionNotifier,
-        :sender_address       => %{"notifier" <sender.address@example.com>},
-        :exception_recipients => %w{your.email@example.com},
-        :ignore_if            => lambda { true }
+        :ignore_if => lambda { true },
+        :email => {
+          :sender_address => %{"notifier" <sender.address@example.com>},
+          :exception_recipients => %w{your.email@example.com}
+        }
 
       ExceptionNotifier::Rake.configure
     end
@@ -94,7 +107,6 @@ If you're using Heroku, the [Scheduler add-on](http://addons.heroku.com/schedule
 This gem fixes this issue. [Here is a detailed guide](http://blog.nikhaldimann.com/2013/02/19/failure-notifications-for-rake-tasks-on-the-heroku-scheduler/) about configuring it on Heroku. In summary: If you configure exception notification as described above it should work out of the box with the Heroku Scheduler. (Provided you have email delivery set up in your Heroku app - you could try the [SendGrid add-on](https://addons.heroku.com/sendgrid) which comes in a free version that should be good enough for notifications.)
 
 
-
 ### Customization
 
 You can pass configuration options to `ExceptionNotifier::Rake.configure`. It accepts all the same options as standard `ExceptionNotifier` (see [its documentation](https://github.com/smartinez87/exception_notification)). These options will be applied only to notifications sent as a result of Rake failures.
@@ -108,11 +120,6 @@ The most likely options you'll want to use are `:email_prefix` and `:exception_r
 This will prefix the email subjects of Rake failure notifications with `[Rake Failure]` and will send them to the two given email addresses. Note that if you set the same options when you configure `ExceptionNotifier` itself, they will be overridden but for Rake failures only.
 
 If you want to configure sections, which is unlikely, note that by default the sections `['rake', 'backtrace']` are used (where `rake` is a custom section introduced by this gem).
-
-
-## Installation
-
-    gem install exception_notification-rake
 
 
 ## License
