@@ -109,7 +109,8 @@ This gem fixes this issue. [Here is a detailed guide](http://blog.nikhaldimann.c
 
 ### Customization
 
-You can pass configuration options to `ExceptionNotifier::Rake.configure`. It accepts all the same options as standard `ExceptionNotifier` (see [its documentation](https://github.com/smartinez87/exception_notification)). These options will be applied only to notifications sent as a result of Rake failures.
+You can pass configuration options to `ExceptionNotifier::Rake.configure`. These will be
+passed through to each notifier you configured with `ExceptionNotifier` (see [its documentation](https://github.com/smartinez87/exception_notification) for details on options). The options will be applied only to notifications sent as a result of Rake failures.
 
 The most likely options you'll want to use are `:email_prefix` and `:exception_recpients`. Example:
 
@@ -117,7 +118,7 @@ The most likely options you'll want to use are `:email_prefix` and `:exception_r
 	  :email_prefix => "[Rake Failure] ",
 	  :exception_recipients => %w{user1@example.com user2@example.com})
 
-This will prefix the email subjects of Rake failure notifications with `[Rake Failure]` and will send them to the two given email addresses. Note that if you set the same options when you configure `ExceptionNotifier` itself, they will be overridden but for Rake failures only.
+This will prefix the email subjects of Rake failure notifications with `[Rake Failure]` and will send them to the two given email addresses. Note that if you set the same options when you configure `ExceptionNotifier` mail notifier itself, they will be overridden but for Rake failures only.
 
 If you want to configure sections, which is unlikely, note that by default the sections `['rake', 'backtrace']` are used (where `rake` is a custom section introduced by this gem).
 
