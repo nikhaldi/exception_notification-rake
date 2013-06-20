@@ -12,10 +12,7 @@ class RakeTest < Test::Unit::TestCase
   end
 
   def expect_delivery(exception, options)
-    mail = Object.new
-    ExceptionNotifier::Notifier.expects(
-      :background_exception_notification).with(exception, options).returns(mail)
-    mail.expects(:deliver)
+    ExceptionNotifier.expects(:notify_exception).with(exception, options)
   end
 
   def test_configure_only_default_options

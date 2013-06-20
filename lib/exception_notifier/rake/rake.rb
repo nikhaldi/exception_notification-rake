@@ -2,10 +2,6 @@ require 'exception_notifier'
 
 module ExceptionNotifier
 
-  # TODO do this in a better place
-  # Append application view path to the ExceptionNotifier lookup context.
-  # Notifier.append_view_path "#{File.dirname(__FILE__)}/views"
-
   class Rake
 
     @notifier_options = {}
@@ -18,10 +14,16 @@ module ExceptionNotifier
     # Configure Rake exception notifications. Should be called in a config file,
     # usually in config/environments/production.rb for production use.
     # An optional hash of options can be given, which will be passed through
-    # unchanged to the underlying ExceptionNotifier.
+    # unchanged to the underlying notifiers.
     def self.configure(options = {})
       @notifier_options.merge!(default_notifier_options)
       @notifier_options.merge!(options)
+
+      # Append view path for this gem, assuming that the client is using
+      # ActionMailer::Base. This isn't ideal but there doesn't seem to be
+      # a different way to extend the path.
+      require 'action_mailer'
+      ActionMailer::Base.append_view_path "#{File.dirname(__FILE__)}/views"
     end
 
     def self.default_notifier_options
@@ -45,8 +47,7 @@ module ExceptionNotifier
           options = options.dup
           options[:data] = data.merge(options[:data] || {})
         end
-        ExceptionNotifier::Notifier.background_exception_notification(
-          exception, options).deliver
+        ExceptionNotifier.notify_exception(exception, options)
       end
     end
 
