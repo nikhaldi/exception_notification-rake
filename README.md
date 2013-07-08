@@ -20,6 +20,8 @@ If you're using Rails 3, use the 0.0.x line of versions:
 
 ### Basic Configuration
 
+**Note:** These examples are for the latest version of the gem (using exception_notification 4 and Rails 4). For a Rails 3.2 example [see below](#rails-3.2-configuration-example).
+
 Exception notification must be set up in your Rails config files. In general, you'll want to do this in environment-specific config files, such as `config/environments/production.rb`. Minimal configuration:
 
     # config/environments/production.rb
@@ -50,6 +52,22 @@ If you are already using `ExceptionNotifier` anyway, you don't need to configure
 	end
 
 **Note:** As a prerequisite for sending mail your Rails Action Mailer needs to be configured in the environment where you're using exception notification. See the [Rails guide on Action Mailer](http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration).
+
+
+#### Rails 3.2 Configuration Example
+
+	# config/environments/production.rb
+
+	YourApp::Application.configure do
+	  # Other configuration here, including ActionMailer config ...
+
+	  config.middleware.use ExceptionNotifier,
+	    :sender_address       => %{"notifier" <sender.address@example.com>},
+	    :exception_recipients => %w{your.email@example.com},
+	    :ignore_if            => lambda { true }
+
+	  ExceptionNotifier::Rake.configure
+	end
 
 
 ### Notification Example
