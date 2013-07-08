@@ -20,7 +20,7 @@ If you're using Rails 3, use the 0.0.x line of versions:
 
 ### Basic Configuration
 
-**Note:** These examples are for the latest version of the gem (using exception_notification 4 and Rails 4). For a Rails 3.2 example [see below](#rails-3.2-configuration-example).
+**Note:** These examples are for the latest version of the gem (using exception_notification 4 and Rails 4). For a Rails 3.2 example [see below](#rails-32-configuration-example).
 
 Exception notification must be set up in your Rails config files. In general, you'll want to do this in environment-specific config files, such as `config/environments/production.rb`. Minimal configuration:
 
