@@ -40,6 +40,11 @@ class ExceptionNotifier
     def self.maybe_deliver_notification(exception, data={})
       if configured?
         options = notifier_options
+        if conditionally_ignored(options[:ignore_if], exception) ||
+            ignored_exception(options[:ignore_exceptions], exception)
+          return
+        end
+
         if !data.empty?
           options = options.dup
           options[:data] = data.merge(options[:data] || {})
@@ -51,6 +56,20 @@ class ExceptionNotifier
 
     def self.reset_for_test
       @notifier_options = {}
+    end
+
+    private
+
+    # Duplicated from exception_notification
+    def self.conditionally_ignored(ignore_proc, exception)
+      ignore_proc.call({}, exception)
+    rescue Exception
+      false
+    end
+
+    # Duplicated from exception_notification
+    def self.ignored_exception(ignore_array, exception)
+        Array.wrap(ignore_array).map(&:to_s).include?(exception.class.name)
     end
   end
 end
