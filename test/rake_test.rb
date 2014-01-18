@@ -6,6 +6,9 @@ require 'exception_notifier/rake'
 
 class RakeTest < Test::Unit::TestCase
 
+  class IgnoredException < Exception
+  end
+
   def setup
     ExceptionNotifier::Rake.reset_for_test
     assert !ExceptionNotifier::Rake.configured?
@@ -53,5 +56,20 @@ class RakeTest < Test::Unit::TestCase
     expect_delivery(ex, options.merge({:data => data}))
     ExceptionNotifier::Rake.maybe_deliver_notification(ex, data)
     assert_equal(original_options, options)
+  end
+
+  def test_maybe_deliver_notifications_with_ignore_if
+    ExceptionNotifier::Rake.configure(
+      ignore_if: lambda { |ex, options| true })
+    ExceptionNotifier::Rake.maybe_deliver_notification(Exception.new)
+  end
+
+  def test_maybe_deliver_notifications_with_ignore_exceptions
+    ExceptionNotifier::Rake.configure(
+      ignore_exceptions: ['RakeTest::IgnoredException'])
+    ExceptionNotifier::Rake.maybe_deliver_notification(IgnoredException.new)
+    ex = Exception.new
+    expect_delivery(ex, ExceptionNotifier::Rake.notifier_options)
+    ExceptionNotifier::Rake.maybe_deliver_notification(ex)
   end
 end
