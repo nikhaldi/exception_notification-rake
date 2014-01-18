@@ -62,13 +62,13 @@ class RakeTest < Test::Unit::TestCase
 
   def test_maybe_deliver_notifications_with_ignore_if
     ExceptionNotifier::Rake.configure(
-      ignore_if: lambda { |env, e| true })
+      :ignore_if => lambda { |env, e| true })
     ExceptionNotifier::Rake.maybe_deliver_notification(Exception.new)
   end
 
   def test_maybe_deliver_notifications_with_ignore_exceptions
     ExceptionNotifier::Rake.configure(
-      ignore_exceptions: ['RakeTest::IgnoredException'])
+      :ignore_exceptions => ['RakeTest::IgnoredException'])
     ExceptionNotifier::Rake.maybe_deliver_notification(IgnoredException.new)
     ex = Exception.new
     expect_delivery(ex, ExceptionNotifier::Rake.notifier_options)
