@@ -138,6 +138,8 @@ The most likely options you'll want to use are `:email_prefix` and `:exception_r
 
 This will prefix the email subjects of Rake failure notifications with `[Rake Failure]` and will send them to the two given email addresses. Note that if you set the same options when you configure `ExceptionNotifier` mail notifier itself, they will be overridden but for Rake failures only.
 
+`:ignore_if` and `:ignore_exceptions` are also supported.
+
 If you want to configure sections, which is unlikely, note that by default the sections `['rake', 'backtrace']` are used (where `rake` is a custom section introduced by this gem).
 
 
