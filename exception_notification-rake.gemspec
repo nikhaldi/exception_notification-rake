@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
   # NB: Rake before 0.9.0 won't support the exception hook we're using
   s.add_runtime_dependency 'rake', '>= 0.9.0'
   s.add_development_dependency 'rails', '~> 4.0.0'
-  s.add_development_dependency 'mocha', '~> 0.13.3'
 
   s.files         = Dir['LICENSE.md', 'README.md', 'lib/**/*']
   s.test_files    = Dir['test/**/*.rb']

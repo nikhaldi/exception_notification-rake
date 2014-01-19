@@ -1,5 +1,4 @@
 require 'test/unit'
-require 'mocha/setup'
 
 require 'active_support/core_ext'
 require 'exception_notifier/rake'
