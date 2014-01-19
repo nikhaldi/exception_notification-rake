@@ -30,7 +30,7 @@ Exception notification must be set up in your Rails config files. In general, yo
       # Other configuration here, including ActionMailer config ...
 
       config.middleware.use ExceptionNotification::Rack,
-        :ignore_if => lambda { true },
+	    :ignore_if => lambda { |env, exception| !env[:rake?] }
         :email => {
           :sender_address => %{"notifier" <sender.address@example.com>},
           :exception_recipients => %w{your.email@example.com}
@@ -39,7 +39,7 @@ Exception notification must be set up in your Rails config files. In general, yo
       ExceptionNotifier::Rake.configure
     end
 
-**Note:** This uses `:ignore_if` to suppress all exception notifications triggered by the Rails server itself (as opposed to Rake). If you want those notifications as well, omit the `:ignore_if` option.
+**Note:** This uses `:ignore_if` to suppress all exception notifications not triggered by Rake (identified by the `:rake?` property set in the environment of all Rake failures). If you want to see all notifications (i.e., also those triggered by requests to the Rails server), omit the `:ignore_if` option.
 
 If you are already using `ExceptionNotifier` anyway, you don't need to configure it again and all you need is:
 
@@ -68,6 +68,8 @@ If you are already using `ExceptionNotifier` anyway, you don't need to configure
 
 	  ExceptionNotifier::Rake.configure
 	end
+
+For complete documentation on the Rails 3.2 version see the [corresponding branch on GitHub](https://github.com/nikhaldi/exception_notification-rake/tree/rails3.2).
 
 
 ### Notification Example
@@ -138,7 +140,7 @@ The most likely options you'll want to use are `:email_prefix` and `:exception_r
 
 This will prefix the email subjects of Rake failure notifications with `[Rake Failure]` and will send them to the two given email addresses. Note that if you set the same options when you configure `ExceptionNotifier` mail notifier itself, they will be overridden but for Rake failures only.
 
-`:ignore_if` and `:ignore_exceptions` are also supported.
+`:ignore_if` and `:ignore_exceptions` are also supported. But note that the `:ignore_if` block will be evaluated for all exceptions, not just the ones triggered by Rake (this is unavoidable because of the design of exception_notification). The first argument to the block passed to `:ignore_if` is the environment - for all Rake failures this will be a dictionary with a single `:rake?` key (i.e., `{:rake? => true}`) so that you can distinguish them.
 
 If you want to configure sections, which is unlikely, note that by default the sections `['rake', 'backtrace']` are used (where `rake` is a custom section introduced by this gem).
 
