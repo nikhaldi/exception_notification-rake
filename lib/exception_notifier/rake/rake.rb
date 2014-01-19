@@ -24,8 +24,8 @@ module ExceptionNotifier
       # actually raised through Rake, identified by the :rake? variable in the
       # environment.
       if options[:ignore_if]
-        ExceptionNotifier.ignore_if do |exception, options|
-          options[:env][:rake?] && options[:ignore_if].call(options[:env], exception)
+        ExceptionNotifier.ignore_if do |exception, passed_options|
+          passed_options[:env][:rake?] && options[:ignore_if].call(passed_options[:env], exception)
         end
       end
 
@@ -64,6 +64,7 @@ module ExceptionNotifier
 
     def self.reset_for_test
       @notifier_options = {}
+      ExceptionNotifier.clear_ignore_conditions!
     end
   end
 end
