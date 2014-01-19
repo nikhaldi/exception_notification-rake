@@ -6,16 +6,32 @@ require 'exception_notifier/rake'
 
 class RakeTest < Test::Unit::TestCase
 
+  class Notifier
+    attr_accessor :exception, :options
+    def call(exception, options)
+      @exception = exception
+      @options = options
+    end
+  end
+
   class IgnoredException < Exception
   end
 
   def setup
     ExceptionNotifier::Rake.reset_for_test
     assert !ExceptionNotifier::Rake.configured?
+    @notifier = Notifier.new
+    ExceptionNotifier.add_notifier 'test_notifier', @notifier
   end
 
-  def expect_delivery(exception, options)
-    ExceptionNotifier.expects(:notify_exception).with(exception, options)
+  def assert_not_notified
+    assert_nil @notifier.exception
+    assert_nil @notifier.options
+  end
+
+  def assert_notified(exception, options)
+    assert_equal exception, @notifier.exception
+    assert_equal options, @notifier.options
   end
 
   def test_configure_only_default_options
@@ -38,13 +54,14 @@ class RakeTest < Test::Unit::TestCase
 
   def test_maybe_deliver_notifications_without_configuration
     ExceptionNotifier::Rake.maybe_deliver_notification(Exception.new)
+    assert_not_notified
   end
 
   def test_maybe_deliver_notifications_with_config
     ExceptionNotifier::Rake.configure
     ex = Exception.new
-    expect_delivery(ex, ExceptionNotifier::Rake.notifier_options)
     ExceptionNotifier::Rake.maybe_deliver_notification(ex)
+    assert_notified ex, ExceptionNotifier::Rake.notifier_options
   end
 
   def test_maybe_deliver_notifications_with_data
@@ -53,23 +70,34 @@ class RakeTest < Test::Unit::TestCase
     options = ExceptionNotifier::Rake.notifier_options
     original_options = options.dup
     ex = Exception.new
-    expect_delivery(ex, options.merge({:data => data}))
     ExceptionNotifier::Rake.maybe_deliver_notification(ex, data)
-    assert_equal(original_options, options)
+    assert_notified ex, options.merge({:data => data})
+    assert_equal original_options, options
   end
 
   def test_maybe_deliver_notifications_with_ignore_if
     ExceptionNotifier::Rake.configure(
-      ignore_if: lambda { |ex, options| true })
+      ignore_if: lambda { |env, exception| true })
     ExceptionNotifier::Rake.maybe_deliver_notification(Exception.new)
+    assert_not_notified
+  end
+
+  def test_maybe_deliver_notifications_with_passing_ignore_if
+    ExceptionNotifier::Rake.configure(
+      ignore_if: lambda { |env, exception| false })
+    ex = Exception.new
+    ExceptionNotifier::Rake.maybe_deliver_notification(ex)
+    assert_notified ex, ExceptionNotifier::Rake.notifier_options
   end
 
   def test_maybe_deliver_notifications_with_ignore_exceptions
     ExceptionNotifier::Rake.configure(
       ignore_exceptions: ['RakeTest::IgnoredException'])
     ExceptionNotifier::Rake.maybe_deliver_notification(IgnoredException.new)
+    assert_not_notified
+
     ex = Exception.new
-    expect_delivery(ex, ExceptionNotifier::Rake.notifier_options)
     ExceptionNotifier::Rake.maybe_deliver_notification(ex)
+    assert_notified ex, ExceptionNotifier::Rake.notifier_options
   end
 end
