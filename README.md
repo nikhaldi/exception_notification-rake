@@ -30,7 +30,7 @@ Exception notification must be set up in your Rails config files. In general, yo
       # Other configuration here, including ActionMailer config ...
 
       config.middleware.use ExceptionNotification::Rack,
-	    :ignore_if => lambda { |env, exception| !env[:rake?] }
+	    :ignore_if => lambda { |env, exception| !env[:rake?] },
         :email => {
           :sender_address => %{"notifier" <sender.address@example.com>},
           :exception_recipients => %w{your.email@example.com}
