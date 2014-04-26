@@ -1,6 +1,5 @@
 require "minitest/autorun"
 
-require 'active_support/core_ext'
 require 'exception_notifier/rake'
 
 class RakeTest < Minitest::Test
