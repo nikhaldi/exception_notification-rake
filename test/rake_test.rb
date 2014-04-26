@@ -1,9 +1,9 @@
-require 'test/unit'
+require "minitest/autorun"
 
 require 'active_support/core_ext'
 require 'exception_notifier/rake'
 
-class RakeTest < Test::Unit::TestCase
+class RakeTest < Minitest::Test
 
   class Notifier
     attr_accessor :exception, :options
