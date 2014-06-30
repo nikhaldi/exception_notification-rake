@@ -38,6 +38,7 @@ module ExceptionNotifier
 
     def self.default_notifier_options
       {
+        :sections => %w(rake backtrace),
         :background_sections => %w(rake backtrace),
         :env => {:rake? => true},
       }
