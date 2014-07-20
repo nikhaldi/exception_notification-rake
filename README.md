@@ -58,7 +58,12 @@ If you are already using `ExceptionNotifier` anyway, you don't need to configure
 **Note:** As a prerequisite for sending mail your Rails Action Mailer needs to be configured in the environment where you're using exception notification. See the [Rails guide on Action Mailer](http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration).
 
 
-#### Rails 3.2 Configuration Example
+### Other Notifiers
+
+exception_notificatons supports a bunch of notifiers other than email. See [its documentation](http://smartinez87.github.io/exception_notification/#notifiers) for details. This gem should generally work out of the box with all notifiers. The Rake command line that led to the failure is available at the `:rake_command_line` key in the `data` dictionary.
+
+
+### Rails 3.2 Configuration Example
 
     # config/environments/production.rb
 
@@ -76,7 +81,7 @@ If you are already using `ExceptionNotifier` anyway, you don't need to configure
 For complete documentation on the Rails 3.2 version see the [corresponding branch on GitHub](https://github.com/nikhaldi/exception_notification-rake/tree/rails3.2).
 
 
-### Notification Example
+### Email Notification Example
 
 Email sent upon a failure will include the Rake tasks executed and a stacktrace. This is the result from calling an undefined method `khaaaaan!` in a task called `failing_task` (the data section contains the executed Rake command line in the `:rake_command_line` key):
 
