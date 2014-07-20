@@ -123,8 +123,6 @@ Email sent upon a failure will include the Rake tasks executed and a stacktrace.
 
       * data: {:rake_command_line=>"rake failing_task"}
 
-(If you're spotting encoding issues here, those appear to be a problem upstream in the exception_notification gem.)
-
 
 ### Usage with Heroku Scheduler
 
