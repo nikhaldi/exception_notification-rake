@@ -1,7 +1,7 @@
 exception_notification-rake - ExceptionNotifier for Rake tasks
 ==============================================================
 
-This Ruby gem is an extension of the [exception_notification gem](http://rubygems.org/gems/exception_notification) to support sending mail upon failures in Rake tasks. This is useful if you run Rake tasks as batch jobs on a schedule, particularly if you're using the [Heroku Scheduler add-on](http://addons.heroku.com/scheduler).
+This Ruby gem is an extension of the [exception_notification gem](http://rubygems.org/gems/exception_notification) to support sending mail (or other sorts of notifications) upon failures in Rake tasks. This is useful if you run Rake tasks as batch jobs on a schedule, particularly if you're using the [Heroku Scheduler add-on](http://addons.heroku.com/scheduler).
 
 [![Build Status](https://travis-ci.org/nikhaldi/exception_notification-rake.png)](https://travis-ci.org/nikhaldi/exception_notification-rake)
 
@@ -9,7 +9,7 @@ This Ruby gem is an extension of the [exception_notification gem](http://rubygem
 
 If you're using Rails 4.1.x (or you're not using Rails at all), use the latest version of the gem:
 
-    gem 'exception_notification-rake', '~> 0.2.0'
+    gem 'exception_notification-rake', '~> 0.2.1'
 
 If you're using Rails 4.0.x, use the 0.1.x line of versions:
 
@@ -22,9 +22,9 @@ If you're using Rails 3, use the 0.0.x line of versions:
 
 ## Usage
 
-### Basic Configuration
+### Configuration for Email Notifications
 
-**Note:** These examples are for the latest version of the gem (using exception_notification 4 and Rails 4). For a Rails 3.2 example [see below](#rails-32-configuration-example).
+**Note:** These examples are for the latest version of the gem (using exception_notification 4.1 and Rails 4.1). For a Rails 3.2 example [see below](#rails-32-configuration-example).
 
 Exception notification must be set up in your Rails config files. In general, you'll want to do this in environment-specific config files, such as `config/environments/production.rb`. Minimal configuration:
 
@@ -34,7 +34,7 @@ Exception notification must be set up in your Rails config files. In general, yo
       # Other configuration here, including ActionMailer config ...
 
       config.middleware.use ExceptionNotification::Rack,
-	    :ignore_if => lambda { |env, exception| !env[:rake?] },
+        :ignore_if => lambda { |env, exception| !env.nil? },
         :email => {
           :sender_address => %{"notifier" <sender.address@example.com>},
           :exception_recipients => %w{your.email@example.com}
@@ -43,83 +43,85 @@ Exception notification must be set up in your Rails config files. In general, yo
       ExceptionNotifier::Rake.configure
     end
 
-**Note:** This uses `:ignore_if` to suppress all exception notifications not triggered by Rake (identified by the `:rake?` property set in the environment of all Rake failures). If you want to see all notifications (i.e., also those triggered by requests to the Rails server), omit the `:ignore_if` option.
+**Note:** This uses `:ignore_if` to suppress all exception notifications not triggered by a background exception (identified by a `nil` environment). If you want to see all notifications (i.e., also those triggered by requests to the Rails server), omit the `:ignore_if` option.
 
 If you are already using `ExceptionNotifier` anyway, you don't need to configure it again and all you need is:
 
-	# config/environments/production.rb
+    # config/environments/production.rb
 
-	YourApp::Application.configure do
-	  # Other configuration here, including ExceptionNotifer and ActionMailer config ...
+    YourApp::Application.configure do
+      # Other configuration here, including ExceptionNotifer and ActionMailer config ...
 
-	  ExceptionNotifier::Rake.configure
-	end
+      ExceptionNotifier::Rake.configure
+    end
 
 **Note:** As a prerequisite for sending mail your Rails Action Mailer needs to be configured in the environment where you're using exception notification. See the [Rails guide on Action Mailer](http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration).
 
 
 #### Rails 3.2 Configuration Example
 
-	# config/environments/production.rb
+    # config/environments/production.rb
 
-	YourApp::Application.configure do
-	  # Other configuration here, including ActionMailer config ...
+    YourApp::Application.configure do
+      # Other configuration here, including ActionMailer config ...
 
-	  config.middleware.use ExceptionNotifier,
-	    :sender_address       => %{"notifier" <sender.address@example.com>},
-	    :exception_recipients => %w{your.email@example.com},
-	    :ignore_if            => lambda { true }
+      config.middleware.use ExceptionNotifier,
+        :sender_address       => %{"notifier" <sender.address@example.com>},
+        :exception_recipients => %w{your.email@example.com},
+        :ignore_if            => lambda { true }
 
-	  ExceptionNotifier::Rake.configure
-	end
+      ExceptionNotifier::Rake.configure
+    end
 
 For complete documentation on the Rails 3.2 version see the [corresponding branch on GitHub](https://github.com/nikhaldi/exception_notification-rake/tree/rails3.2).
 
 
 ### Notification Example
 
-Email sent upon a failure will include the Rake tasks executed and a stacktrace. This is the result from calling an undefined method `khaaaaan!` in a task called `failing_task`:
+Email sent upon a failure will include the Rake tasks executed and a stacktrace. This is the result from calling an undefined method `khaaaaan!` in a task called `failing_task` (the data section contains the executed Rake command line in the `:rake_command_line` key):
 
-	Subject: [ERROR] (NoMethodError) "undefined method `khaaaaan!' for main:Object"
-	From: "notifier" <sender.address@example.com>
-	To: <your.email@example.com>
+    Subject: [ERROR] (NoMethodError) "undefined method `khaaaaan!' for main:Object"
+    From: "notifier" <sender.address@example.com>
+    To: <your.email@example.com>
 
-	A NoMethodError occurred in background at 2013-02-07 18:31:57 UTC :
+    A NoMethodError occurred in background at 2014-07-20 21:25:00 UTC :
 
-	  undefined method `khaaaaan!&#x27; for main:Object
-	  lib/tasks/scheduler.rake:33:in `block in &lt;top (required)&gt;&#x27;
+      undefined method `khaaaaan!' for main:Object
+      /Users/haldimann/Projects/nikhaldimann.com/lib/tasks/scheduler.rake:33:in `block in <top (required)>'
 
-	-------------------------------
-	Rake:
-	-------------------------------
+    -------------------------------
+    Backtrace:
+    -------------------------------
 
-	  rake failing_task
+      lib/tasks/scheduler.rake:33:in `block in <top (required)>'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/task.rb:240:in `call'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/task.rb:240:in `block in execute'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/task.rb:235:in `each'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/task.rb:235:in `execute'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/task.rb:179:in `block in invoke_with_call_chain'
+      .rvm/rubies/ruby-1.9.3-p327/lib/ruby/1.9.1/monitor.rb:211:in `mon_synchronize'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/task.rb:172:in `invoke_with_call_chain'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/task.rb:165:in `invoke'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/application.rb:150:in `invoke_task'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/application.rb:106:in `block (2 levels) in top_level'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/application.rb:106:in `each'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/application.rb:106:in `block in top_level'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/application.rb:115:in `run_with_threads'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/application.rb:100:in `top_level'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/application.rb:78:in `block in run'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/application.rb:176:in `standard_exception_handling'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/lib/rake/application.rb:75:in `run'
+      .rvm/gems/ruby-1.9.3-p327/gems/rake-10.3.2/bin/rake:33:in `<top (required)>'
+      .rvm/gems/ruby-1.9.3-p327/bin/rake:19:in `load'
+      .rvm/gems/ruby-1.9.3-p327/bin/rake:19:in `<main>'
+      .rvm/gems/ruby-1.9.3-p327/bin/ruby_noexec_wrapper:14:in `eval'
+      .rvm/gems/ruby-1.9.3-p327/bin/ruby_noexec_wrapper:14:in `<main>'
 
-	-------------------------------
-	Backtrace:
-	-------------------------------
+    -------------------------------
+    Data:
+    -------------------------------
 
-	  lib/tasks/scheduler.rake:33:in `block in <top (required)>'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/task.rb:228:in `call'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/task.rb:228:in `block in execute'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/task.rb:223:in `each'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/task.rb:223:in `execute'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/task.rb:166:in `block in invoke_with_call_chain'
-	  .rvm/rubies/ruby-1.9.3-p327/lib/ruby/1.9.1/monitor.rb:211:in `mon_synchronize'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/task.rb:159:in `invoke_with_call_chain'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/task.rb:152:in `invoke'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/application.rb:143:in `invoke_task'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/application.rb:101:in `block (2 levels) in top_level'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/application.rb:101:in `each'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/application.rb:101:in `block in top_level'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/application.rb:110:in `run_with_threads'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/application.rb:95:in `top_level'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/application.rb:73:in `block in run'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/application.rb:160:in `standard_exception_handling'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/lib/rake/application.rb:70:in `run'
-	  .rvm/gems/ruby-1.9.3-p327/gems/rake-10.0.3/bin/rake:33:in `<top (required)>'
-	  .rvm/gems/ruby-1.9.3-p327/bin/rake:23:in `load'
-	  .rvm/gems/ruby-1.9.3-p327/bin/rake:23:in `<main>'
+      * data: {:rake_command_line=>"rake failing_task"}
 
 (If you're spotting encoding issues here, those appear to be a problem upstream in the exception_notification gem.)
 
@@ -139,14 +141,13 @@ passed through to each notifier you configured with `ExceptionNotifier` (see [it
 The most likely options you'll want to use are `:email_prefix` and `:exception_recpients`. Example:
 
     ExceptionNotifier::Rake.configure(
-	  :email_prefix => "[Rake Failure] ",
-	  :exception_recipients => %w{user1@example.com user2@example.com})
+      :email => {
+        :email_prefix => "[Rake Failure] ",
+        :exception_recipients => %w{user1@example.com user2@example.com}})
 
 This will prefix the email subjects of Rake failure notifications with `[Rake Failure]` and will send them to the two given email addresses. Note that if you set the same options when you configure `ExceptionNotifier` mail notifier itself, they will be overridden but for Rake failures only.
 
-`:ignore_if` and `:ignore_exceptions` are also supported. But note that the `:ignore_if` block will be evaluated for all exceptions, not just the ones triggered by Rake (this is unavoidable because of the design of exception_notification). The first argument to the block passed to `:ignore_if` is the environment - for all Rake failures this will be a dictionary with a single `:rake?` key (i.e., `{:rake? => true}`) so that you can distinguish them.
-
-If you want to configure sections, which is unlikely, note that by default the sections `['rake', 'backtrace']` are used (where `rake` is a custom section introduced by this gem).
+`:ignore_if` and `:ignore_exceptions` are also supported. But note that the `:ignore_if` block will be evaluated for all exceptions, not just the ones triggered by Rake (this is unavoidable because of the design of exception_notification). The first argument to the block passed to `:ignore_if` is the environment - for all Rake failures and other background exceptions this will be `nil`, giving you some way to distinguish them.
 
 
 ## License
