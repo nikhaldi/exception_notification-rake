@@ -1,9 +1,8 @@
-require 'test/unit'
+require "minitest/autorun"
 
-require 'active_support/core_ext'
 require 'exception_notifier/rake'
 
-class RakeTest < Test::Unit::TestCase
+class RakeTest < Minitest::Test
 
   class Notifier
     attr_accessor :exception, :options
@@ -36,8 +35,7 @@ class RakeTest < Test::Unit::TestCase
   def test_configure_only_default_options
     ExceptionNotifier::Rake.configure
     assert ExceptionNotifier::Rake.configured?
-    assert_equal ExceptionNotifier::Rake.default_notifier_options,
-      ExceptionNotifier::Rake.notifier_options
+    assert_equal({}, ExceptionNotifier::Rake.notifier_options)
   end
 
   def test_configure_custom_options
@@ -47,8 +45,7 @@ class RakeTest < Test::Unit::TestCase
     }
     ExceptionNotifier::Rake.configure some_options
     assert ExceptionNotifier::Rake.configured?
-    assert_equal some_options.merge(ExceptionNotifier::Rake.default_notifier_options),
-      ExceptionNotifier::Rake.notifier_options
+    assert_equal some_options, ExceptionNotifier::Rake.notifier_options
   end
 
   def test_maybe_deliver_notifications_without_configuration
