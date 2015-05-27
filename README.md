@@ -141,7 +141,7 @@ This gem fixes this issue. [Here is a detailed guide](http://blog.nikhaldimann.c
 You can pass configuration options to `ExceptionNotifier::Rake.configure`. These will be
 passed through to each notifier you configured with `ExceptionNotifier` (see [its documentation](https://github.com/smartinez87/exception_notification) for details on options). The options will be applied only to notifications sent as a result of Rake failures.
 
-The most likely options you'll want to use are `:email_prefix` and `:exception_recpients`. Example:
+The most likely options you'll want to use are `:email_prefix` and `:exception_recipients`. Example:
 
     ExceptionNotifier::Rake.configure(
       :email => {
