@@ -1,3 +1,5 @@
+require 'rake'
+
 module ExceptionNotifier
   module RakePatch
     def self.patch!
