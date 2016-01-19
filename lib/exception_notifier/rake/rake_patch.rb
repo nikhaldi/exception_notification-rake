@@ -9,11 +9,11 @@ module ExceptionNotifier
           ExceptionNotifier::Rake.maybe_deliver_notification(ex,
             :rake_command_line => reconstruct_command_line)
         end
-      end
-    end
 
-    def reconstruct_command_line
-      "rake #{ARGV.join(' ')}"
+        def reconstruct_command_line
+          "rake #{ARGV.join(' ')}"
+        end
+      end
     end
   end
 end
