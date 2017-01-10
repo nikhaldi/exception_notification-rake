@@ -13,7 +13,7 @@ If you're using Rails 4.1.x (or you're not using Rails at all), use the latest v
 
 If you're using Rails 4.0.x, use the 0.1.x line of versions:
 
-    gem 'exception_notification-rake', '~> 0.1.2'
+    gem 'exception_notification-rake', '~> 0.1.3'
 
 If you're using Rails 3, use the 0.0.x line of versions:
 
