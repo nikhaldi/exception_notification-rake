@@ -23,7 +23,7 @@ end
 
 # Only do this if we're actually in a Rake context. In some contexts (e.g.,
 # in the Rails console) Rake might not be defined.
-if Object.const_defined? :Rake
+if Object.const_defined?(:Rake) && Rake.respond_to?(:application)
   Rake.application.instance_eval do
     class << self
       include ExceptionNotifier::RakePatch
