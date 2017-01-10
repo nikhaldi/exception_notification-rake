@@ -3,6 +3,8 @@ exception_notification-rake - ExceptionNotifier for Rake tasks
 
 This Ruby gem is an extension of the [exception_notification gem](http://rubygems.org/gems/exception_notification) to support sending mail upon failures in Rake tasks. This is useful if you run Rake tasks as batch jobs on a schedule, particularly if you're using the [Heroku Scheduler add-on](http://addons.heroku.com/scheduler).
 
+This is the branch for the 0.0.x line of versions compatible with **Rails 3.2**.
+
 [![Build Status](https://travis-ci.org/nikhaldi/exception_notification-rake.png)](https://travis-ci.org/nikhaldi/exception_notification-rake)
 
 ## Usage
