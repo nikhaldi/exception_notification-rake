@@ -1,10 +1,7 @@
 language: ruby
 rvm:
-  - jruby-19mode
-  - 1.9.3
   - 2.0.0
   - 2.1
-  - 2.2
 before_install:
   # This is a workaround for a bug in bundler that Travis' VM comes with by default
   - gem update bundler
