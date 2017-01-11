@@ -7,6 +7,10 @@ This Ruby gem is an extension of the [exception_notification gem](http://rubygem
 
 ## Installation
 
+If you're using Rails 4.2 or higher, including Rails 5 (or you're not using Rails at all), use the latest version of the gem (this is currently a release candidate and not extensively tested yet):
+
+    gem 'exception_notification-rake', '~> 0.3.0.rc1'
+
 If you're using Rails 4.1.x (or you're not using Rails at all), use the latest version of the gem:
 
     gem 'exception_notification-rake', '~> 0.2.2'
@@ -24,7 +28,7 @@ If you're using Rails 3, use the 0.0.x line of versions:
 
 ### Configuration for Email Notifications
 
-**Note:** These examples are for the latest version of the gem (using exception_notification 4.1 and Rails 4.1). For a Rails 3.2 example [see below](#rails-32-configuration-example).
+**Note:** These examples are for the latest version of the gem (using exception_notification 4+ and Rails 4+). For a Rails 3.2 example [see below](#rails-32-configuration-example).
 
 Exception notification must be set up in your Rails config files. In general, you'll want to do this in environment-specific config files, such as `config/environments/production.rb`. Minimal configuration:
 
