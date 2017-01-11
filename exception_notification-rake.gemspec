@@ -13,10 +13,9 @@ Gem::Specification.new do |s|
     ' sending mail upon failures in Rake tasks'
 
   s.required_ruby_version = '>= 2.0'
-  s.add_runtime_dependency 'exception_notification', '~> 4.1.0'
+  s.add_runtime_dependency 'exception_notification', '~> 4.2.0'
   # NB: Rake before 0.9.0 won't support the exception hook we're using
   s.add_runtime_dependency 'rake', '>= 0.9.0'
-  s.add_development_dependency 'rails', '~> 4.1.0'
 
   s.files         = Dir['LICENSE.md', 'README.md', 'lib/**/*']
   s.test_files    = Dir['test/**/*.rb']
