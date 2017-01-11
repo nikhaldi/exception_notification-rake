@@ -17,6 +17,22 @@ Gem::Specification.new do |s|
   # NB: Rake before 0.9.0 won't support the exception hook we're using
   s.add_runtime_dependency 'rake', '>= 0.9.0'
 
+  # When developing/testing under various Ruby versions we have to set upper
+  # version limits on some direct dependencies of exception_notification (and
+  # some indirect dependencies such as nokogiri) because later versions are
+  # not supported under the specific Ruby. This makes running tests on Travis
+  # under all Rubies 2.0+ possible.
+  if RUBY_VERSION >= '2.2'
+    # No restrictions known at this point
+  elsif RUBY_VERSION >= '2.1'
+    s.add_development_dependency 'actionmailer', '~> 4.2.0'
+    s.add_development_dependency 'activesupport', '~> 4.2.0'
+  else
+    s.add_development_dependency 'actionmailer', '~> 4.2.0'
+    s.add_development_dependency 'activesupport', '~> 4.2.0'
+    s.add_development_dependency 'nokogiri', '~> 1.6.0'
+  end
+
   s.files         = Dir['LICENSE.md', 'README.md', 'lib/**/*']
   s.test_files    = Dir['test/**/*.rb']
   s.require_paths = ['lib']
