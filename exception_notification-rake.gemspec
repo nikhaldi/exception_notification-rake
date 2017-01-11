@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
   # some indirect dependencies such as nokogiri) because later versions are
   # not supported under the specific Ruby. This makes running tests on Travis
   # under all Rubies 2.0+ possible.
+  # Note for future: Travis also supports giving multiple gemspecs:
+  # https://docs.travis-ci.com/user/languages/ruby/#Testing-against-multiple-versions-of-dependencies
   if RUBY_VERSION >= '2.2'
     # No restrictions known at this point
   elsif RUBY_VERSION >= '2.1'
