@@ -3,6 +3,8 @@ rvm:
   - 2.0.0
   - 2.1
   - 2.2
+  - 2.3
+  - 2.4
 before_install:
   # This is a workaround for a bug in bundler that Travis' VM comes with by default
   - gem update bundler
