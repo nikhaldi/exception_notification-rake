@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
     ' sending mail upon failures in Rake tasks'
 
   s.required_ruby_version = '>= 2.0'
-  s.add_runtime_dependency 'exception_notification', '~> 4.2.0'
+  s.add_runtime_dependency 'exception_notification', '~> 4.3'
   # NB: Rake before 0.9.0 won't support the exception hook we're using
   s.add_runtime_dependency 'rake', '>= 0.9.0'
 
@@ -27,11 +27,11 @@ Gem::Specification.new do |s|
   if RUBY_VERSION >= '2.2'
     # No restrictions known at this point
   elsif RUBY_VERSION >= '2.1'
-    s.add_development_dependency 'actionmailer', '~> 4.2.0'
-    s.add_development_dependency 'activesupport', '~> 4.2.0'
+    s.add_development_dependency 'actionmailer', '~> 4.2'
+    s.add_development_dependency 'activesupport', '~> 4.2'
   else
-    s.add_development_dependency 'actionmailer', '~> 4.2.0'
-    s.add_development_dependency 'activesupport', '~> 4.2.0'
+    s.add_development_dependency 'actionmailer', '~> 4.2'
+    s.add_development_dependency 'activesupport', '~> 4.2'
     s.add_development_dependency 'nokogiri', '~> 1.6.0'
   end
 
