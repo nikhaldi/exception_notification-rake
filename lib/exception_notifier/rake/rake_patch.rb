@@ -2,15 +2,8 @@
 # https://github.com/thoughtbot/airbrake/blob/master/lib/airbrake/rake_handler.rb
 module ExceptionNotifier
   module RakePatch
-    def self.included(klass)
-      klass.class_eval do
-        alias_method :display_error_message_without_notifications, :display_error_message
-        alias_method :display_error_message, :display_error_message_with_notifications
-      end
-    end
-
-    def display_error_message_with_notifications(ex)
-      display_error_message_without_notifications(ex)
+    def display_error_message(ex)
+      super(ex)
       ExceptionNotifier::Rake.maybe_deliver_notification(ex,
         :rake_command_line => reconstruct_command_line)
     end
@@ -26,7 +19,7 @@ end
 if Object.const_defined?(:Rake) && Rake.respond_to?(:application)
   Rake.application.instance_eval do
     class << self
-      include ExceptionNotifier::RakePatch
+      prepend ExceptionNotifier::RakePatch
     end
   end
 end
