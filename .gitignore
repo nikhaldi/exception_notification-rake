@@ -4,6 +4,8 @@
 .config
 coverage
 Gemfile.lock
+gemfiles/*.lock
+gemfiles/.bundle
 InstalledFiles
 lib/bundler/man
 pkg
