@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.0.0
+  - 2.0
   - 2.1
   - 2.2
   - 2.3
@@ -8,8 +8,23 @@ rvm:
   - 2.5
   - 2.6
   - 2.7
-before_install:
-  # This is a workaround for a bug in bundler that Travis' VM comes with by default
-  - gem update bundler
-# uncomment this line if your project needs to run something other than `rake`:
-# script: bundle exec rspec spec
+gemfile:
+  - gemfiles/activesupport_4.2.gemfile
+  - gemfiles/activesupport_5.2.gemfile
+  - gemfiles/activesupport_6.gemfile
+jobs:
+  exclude:
+  - rvm: 2.0
+    gemfile: gemfiles/activesupport_5.2.gemfile
+  - rvm: 2.0
+    gemfile: gemfiles/activesupport_6.gemfile
+  - rvm: 2.1
+    gemfile: gemfiles/activesupport_5.2.gemfile
+  - rvm: 2.1
+    gemfile: gemfiles/activesupport_6.gemfile
+  - rvm: 2.2
+    gemfile: gemfiles/activesupport_6.gemfile
+  - rvm: 2.3
+    gemfile: gemfiles/activesupport_6.gemfile
+  - rvm: 2.4
+    gemfile: gemfiles/activesupport_6.gemfile

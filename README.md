@@ -7,7 +7,7 @@ This Ruby gem is an extension of the [exception_notification gem](http://rubygem
 
 ## Installation
 
-If you're using Rails 4.2 or higher, including Rails 5 (or you're not using Rails at all), use the latest version of the gem:
+If you're using Rails 4.2, 5 or 6 (or you're not using Rails at all), use the latest version of the gem:
 
     gem 'exception_notification-rake', '~> 0.3.1'
 
