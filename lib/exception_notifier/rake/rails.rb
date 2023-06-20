@@ -1,4 +1,6 @@
-# Based on/adapted from https://github.com/airbrake/airbrake/blob/master/lib/airbrake/rails.rb
+# Based on/adapted from
+# https://github.com/airbrake/airbrake/blob/master/lib/airbrake/rails.rb
+# https://github.com/airbrake/airbrake/blob/master/lib/airbrake/rails/railtie.rb
 
 module ExceptionNotifier
   class Rake
@@ -10,6 +12,16 @@ module ExceptionNotifier
         # Rake::TaskManager won't have been defined when rake_patch.rb was first loaded.
         if Rails.env.development?
           load 'exception_notifier/rake/rake_patch.rb'
+        end
+      end
+
+      runner do
+        at_exit do
+          if $ERROR_INFO
+            ExceptionNotifier::Rake.maybe_deliver_notification(
+              $ERROR_INFO
+            )
+          end
         end
       end
     end
